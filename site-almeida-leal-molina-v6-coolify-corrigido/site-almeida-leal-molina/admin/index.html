@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de conteúdos — Almeida, Leal & Molina</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23121c26'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' fill='%23c8ad80' text-anchor='middle'%3EALM%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/admin.css?v=7">
+</head>
+<body>
+  <div class="demo-banner" id="demo-banner" hidden>
+    Modo demonstração: as publicações ficam salvas apenas neste navegador. O banco de dados definitivo ainda será definido.
+  </div>
+
+  <!-- ================= LOGIN ================= -->
+  <main class="login" id="view-login" hidden>
+    <form class="login__card" id="login-form" novalidate>
+      <p class="brand"><span class="brand__name">Almeida, Leal <em>&amp;</em> Molina</span><span class="brand__sub">Painel de conteúdos</span></p>
+      <h1 class="login__title">Entrar</h1>
+      <label class="field">
+        <span class="field__label">E-mail</span>
+        <input type="email" id="login-email" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span class="field__label">Senha</span>
+        <input type="password" id="login-pass" autocomplete="current-password" required>
+      </label>
+      <p class="form-error" id="login-error" role="alert" hidden></p>
+      <button class="btn btn--primary btn--block" type="submit">Entrar</button>
+      <p class="login__demo" id="login-demo" hidden></p>
+      <a class="login__back" href="../">Voltar ao site</a>
+    </form>
+  </main>
+
+  <!-- ================= APP ================= -->
+  <div class="app" id="view-app" hidden>
+    <aside class="side">
+      <p class="brand"><span class="brand__name">Almeida, Leal <em>&amp;</em> Molina</span><span class="brand__sub">Painel de conteúdos</span></p>
+      <nav class="side__nav" aria-label="Painel">
+        <a href="#/publicacoes" data-route="publicacoes">Publicações</a>
+        <a href="#/nova" data-route="nova">Nova publicação</a>
+        <a href="#/configuracoes" data-route="configuracoes">Configurações</a>
+        <a href="#/usuarios" data-route="usuarios" data-admin>Usuários</a>
+      </nav>
+      <div class="side__foot">
+        <p class="side__user" id="user-name"></p>
+        <a class="side__link" href="../" target="_blank" rel="noopener">Ver o site</a>
+        <a class="side__link" href="../conteudos/" target="_blank" rel="noopener">Ver blog publicado</a>
+        <button class="side__link" type="button" id="logout">Sair</button>
+      </div>
+    </aside>
+
+    <main class="main" id="main" tabindex="-1">
+
+      <!-- Lista de publicações -->
+      <section class="view" id="view-publicacoes" hidden>
+        <header class="view__head">
+          <div>
+            <h1>Publicações</h1>
+            <p class="muted" id="posts-count"></p>
+          </div>
+          <a class="btn btn--primary" href="#/nova">Nova publicação</a>
+        </header>
+        <div class="toolbar">
+          <div class="seg" role="group" aria-label="Filtrar por situação">
+            <button type="button" data-status="todos" aria-pressed="true">Todas</button>
+            <button type="button" data-status="publicado" aria-pressed="false">Publicadas</button>
+            <button type="button" data-status="rascunho" aria-pressed="false">Rascunhos</button>
+          </div>
+          <input class="input input--search" type="search" id="posts-search" placeholder="Buscar pelo título">
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Título</th><th>Autor</th><th>Categoria</th><th>Data</th><th>Situação</th><th><span class="sr-only">Ações</span></th></tr></thead>
+            <tbody id="posts-body"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="posts-empty" hidden>
+          <p>Nenhuma publicação por aqui ainda.</p>
+          <a class="btn btn--primary" href="#/nova">Escrever a primeira publicação</a>
+        </div>
+      </section>
+
+      <!-- Editor -->
+      <section class="view" id="view-editor" hidden>
+        <form id="editor-form" novalidate>
+          <header class="view__head view__head--sticky">
+            <div>
+              <a class="back" href="#/publicacoes">Publicações</a>
+              <h1 id="editor-title">Nova publicação</h1>
+            </div>
+            <div class="actions">
+              <span class="save-state" id="save-state" aria-live="polite"></span>
+              <button class="btn btn--ghost" type="button" id="btn-preview">Pré-visualizar</button>
+              <button class="btn btn--ghost" type="submit" data-status="rascunho">Salvar rascunho</button>
+              <button class="btn btn--primary" type="submit" data-status="publicado" id="btn-publish">Publicar</button>
+            </div>
+          </header>
+
+          <div class="editor">
+            <div class="editor__main">
+              <label class="field">
+                <span class="field__label">Título</span>
+                <input class="input input--title" id="f-titulo" required maxlength="160" placeholder="Ex.: O que muda com a reforma tributária para…">
+              </label>
+              <label class="field">
+                <span class="field__label">Resumo <span class="muted">(aparece na listagem e no Google — até 220 caracteres)</span></span>
+                <textarea class="input" id="f-resumo" rows="2" maxlength="220"></textarea>
+                <span class="counter" id="resumo-count">0/220</span>
+              </label>
+
+              <div class="field">
+                <span class="field__label" id="lbl-conteudo">Texto</span>
+                <div class="rte">
+                  <div class="rte__bar" role="toolbar" aria-label="Formatação do texto">
+                    <button type="button" data-cmd="formatBlock" data-val="H2" title="Título de seção">Título</button>
+                    <button type="button" data-cmd="formatBlock" data-val="H3" title="Subtítulo">Subtítulo</button>
+                    <button type="button" data-cmd="formatBlock" data-val="P" title="Parágrafo normal">Texto</button>
+                    <span class="rte__sep"></span>
+                    <button type="button" data-cmd="bold" title="Negrito (Ctrl+B)"><b>N</b></button>
+                    <button type="button" data-cmd="italic" title="Itálico (Ctrl+I)"><i>I</i></button>
+                    <span class="rte__sep"></span>
+                    <button type="button" data-cmd="insertUnorderedList" title="Lista com marcadores">• Lista</button>
+                    <button type="button" data-cmd="insertOrderedList" title="Lista numerada">1. Lista</button>
+                    <button type="button" data-cmd="formatBlock" data-val="BLOCKQUOTE" title="Citação">“ ”</button>
+                    <span class="rte__sep"></span>
+                    <button type="button" data-cmd="link" title="Inserir link">Link</button>
+                    <button type="button" data-cmd="image" title="Inserir imagem no texto">Imagem</button>
+                    <button type="button" data-cmd="removeFormat" title="Limpar formatação">Limpar</button>
+                  </div>
+                  <div class="rte__area prose" id="f-conteudo" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="lbl-conteudo" data-placeholder="Comece a escrever. Cole textos do Word à vontade: a formatação é limpa automaticamente."></div>
+                </div>
+                <input type="file" id="inline-image" accept="image/jpeg,image/png,image/webp" hidden>
+              </div>
+            </div>
+
+            <aside class="editor__side">
+              <div class="panel">
+                <h2 class="panel__title">Publicação</h2>
+                <label class="field">
+                  <span class="field__label">Autor</span>
+                  <select class="input" id="f-autor"></select>
+                </label>
+                <label class="field">
+                  <span class="field__label">Categoria</span>
+                  <input class="input" id="f-categoria" list="cat-list" placeholder="Escolha ou digite uma nova">
+                  <datalist id="cat-list"></datalist>
+                </label>
+                <label class="field">
+                  <span class="field__label">Data de publicação</span>
+                  <input class="input" type="date" id="f-data">
+                </label>
+                <label class="field">
+                  <span class="field__label">Endereço da página</span>
+                  <span class="slug"><span class="muted">/conteudos/</span><input class="input input--slug" id="f-slug" placeholder="gerado-pelo-titulo"></span>
+                </label>
+              </div>
+
+              <div class="panel">
+                <h2 class="panel__title">Imagem de capa</h2>
+                <div class="cover" id="cover">
+                  <img id="cover-img" alt="" hidden>
+                  <label class="cover__drop" id="cover-drop">
+                    <input type="file" id="f-capa" accept="image/jpeg,image/png,image/webp">
+                    <span>Escolher imagem<br><small class="muted">JPG, PNG ou WebP — ideal 1600 × 1000 px</small></span>
+                  </label>
+                </div>
+                <button class="btn btn--ghost btn--sm" type="button" id="cover-remove" hidden>Remover capa</button>
+              </div>
+
+              <div class="panel">
+                <h2 class="panel__title">Publicado em outro lugar?</h2>
+                <label class="field">
+                  <span class="field__label">Link do artigo original <span class="muted">(opcional, ex.: LinkedIn)</span></span>
+                  <input class="input" type="url" id="f-link" placeholder="https://www.linkedin.com/pulse/…">
+                </label>
+              </div>
+
+              <button class="btn btn--danger btn--sm" type="button" id="btn-delete" hidden>Excluir publicação</button>
+            </aside>
+          </div>
+          <p class="form-error" id="editor-error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <!-- Configurações -->
+      <section class="view" id="view-configuracoes" hidden>
+        <header class="view__head"><div><h1>Configurações</h1><p class="muted">Contatos exibidos em todo o site.</p></div></header>
+        <form class="panel panel--form" id="settings-form" novalidate>
+          <label class="field">
+            <span class="field__label">Número do WhatsApp <span class="muted">(com DDI e DDD, só números)</span></span>
+            <input class="input" id="s-wa" inputmode="numeric" placeholder="5521987059438">
+          </label>
+          <label class="field">
+            <span class="field__label">Como o número aparece no site</span>
+            <input class="input" id="s-wa-exibicao" placeholder="+55 21 98705-9438">
+          </label>
+          <label class="field">
+            <span class="field__label">E-mail de contato</span>
+            <input class="input" type="email" id="s-email" placeholder="contato@almeidaleal.adv.br">
+          </label>
+          <p class="form-error" id="settings-error" role="alert" hidden></p>
+          <div class="actions"><button class="btn btn--primary" type="submit">Salvar configurações</button></div>
+        </form>
+      </section>
+
+      <!-- Usuários -->
+      <section class="view" id="view-usuarios" hidden>
+        <header class="view__head"><div><h1>Usuários</h1><p class="muted">Quem pode entrar no painel. Editores publicam; administradores também gerenciam usuários.</p></div></header>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th><span class="sr-only">Ações</span></th></tr></thead>
+            <tbody id="users-body"></tbody>
+          </table>
+        </div>
+        <form class="panel panel--form" id="user-form" novalidate>
+          <h2 class="panel__title">Adicionar usuário</h2>
+          <div class="grid-2">
+            <label class="field"><span class="field__label">Nome</span><input class="input" id="u-nome" required></label>
+            <label class="field"><span class="field__label">E-mail</span><input class="input" type="email" id="u-email" required></label>
+            <label class="field"><span class="field__label">Senha inicial <span class="muted">(mín. 8 caracteres)</span></span><input class="input" type="password" id="u-senha" autocomplete="new-password" required></label>
+            <label class="field"><span class="field__label">Perfil</span>
+              <select class="input" id="u-papel"><option value="editor">Editor</option><option value="admin">Administrador</option></select>
+            </label>
+          </div>
+          <p class="form-error" id="user-error" role="alert" hidden></p>
+          <div class="actions"><button class="btn btn--primary" type="submit">Adicionar usuário</button></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="../js/config.js?v=7"></script>
+  <script src="../js/data/equipe.js?v=7"></script>
+  <script src="../js/data/seed-posts.js?v=7"></script>
+  <script src="../js/lib/utils.js?v=7"></script>
+  <script src="../js/lib/sanitize.js?v=7"></script>
+  <script src="../js/store/local-adapter.js?v=7"></script>
+  <script src="../js/store/rest-adapter.js?v=7"></script>
+  <script src="../js/store/store.js?v=7"></script>
+  <script src="../js/admin.js?v=7"></script>
+</body>
+</html>

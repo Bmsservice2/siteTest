@@ -1,0 +1,19 @@
+# ============================================================
+# Nixpacks — usado pelo Coolify para construir a imagem sem
+# precisar de Dockerfile. O Nixpacks já detectaria um app Node
+# sozinho (por causa do package.json), mas fixamos aqui a versão
+# do Node e removemos o passo de "build" (não existe: é servidor
+# + HTML/CSS/JS puro, sem bundler) para o deploy ficar rápido e
+# previsível.
+# ============================================================
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci --omit=dev"]
+
+[phases.build]
+cmds = []
+
+[start]
+cmd = "node server/index.js"
