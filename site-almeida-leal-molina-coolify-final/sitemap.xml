@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: confirmar domínio. Quando houver backend, gerar as URLs dos artigos automaticamente. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://almeidaleal.adv.br/</loc></url>
+  <url><loc>https://almeidaleal.adv.br/conteudos/</loc></url>
+</urlset>
