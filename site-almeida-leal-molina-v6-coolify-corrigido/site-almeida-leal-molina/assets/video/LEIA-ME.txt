@@ -1,0 +1,12 @@
+VIDEO DO HERO
+
+Coloque aqui o vídeo final do banner.
+
+Arquivos aceitos pela configuração atual:
+- banner.mp4
+- banner.webm (opcional, preferencial para navegadores que suportarem)
+
+Depois, em js/config.js:
+ALM_CONFIG.heroVideo.enabled = true
+
+O poster/fallback atual é a foto dos três sócios.

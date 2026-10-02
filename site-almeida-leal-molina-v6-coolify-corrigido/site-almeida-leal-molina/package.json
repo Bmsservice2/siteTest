@@ -1,0 +1,25 @@
+{
+  "name": "site-almeida-leal-molina",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site institucional + blog do Almeida, Leal & Molina Advogados (front-end estático + API do blog em Node/Express).",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18 <23"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "healthcheck": "node -e \"fetch('http://127.0.0.1:' + (process.env.PORT || 3000) + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^18.0.3",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.0",
+    "sanitize-html": "^2.13.0"
+  }
+}
